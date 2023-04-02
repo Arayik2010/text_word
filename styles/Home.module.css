@@ -276,3 +276,55 @@
     transform: rotate(0deg);
   }
 }
+
+.container{
+  width: 650px;
+  height: 250px;
+  background-color: yellow;
+  padding: 50px 20px;
+  
+
+
+}
+.text{
+  font-size: 20px;
+  margin:auto;
+}
+.input {
+  border:none;
+  width:60px;
+  text-align:center;
+  font-size:14px;
+  background:yellow
+}
+.select{
+  border:none;
+  border-radius:2px;
+  background-color:yellow;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align:center;
+  font-size:17px;
+  font-weight: normal;
+  width:60px
+
+}
+.select::-ms-expand {
+  display: none;
+}
+.select_wrong{
+  border:2px solid red;
+  border-radius:3px;
+  background-color:yellow;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align:center;
+  font-size:17px;
+  font-weight: normal;
+  width:60px
+}
+.select_wrong::-ms-expand {
+  display: none;
+}
