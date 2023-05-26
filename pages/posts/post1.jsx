@@ -58,6 +58,7 @@ const Post1 = () => {
           Lorem Ipsum is{" "}
           <select
             defaultValue={"DEFAULT"}
+            value={inputValue1}
             className={wrong ? styles.select_wrong : styles.select}
             onChange={(e) => setInputValue1(e.target.value)}
           >
@@ -70,6 +71,7 @@ const Post1 = () => {
           dummy text of the printing and typesetting industry.{" "}
           <select
             defaultValue={"DEFAULT"}
+            value={inputValue2}
             className={wrong ? styles.select_wrong : styles.select}
             onChange={(e) => setInputValue2(e.target.value)}
           >
@@ -84,6 +86,7 @@ const Post1 = () => {
           a type specimen{" "}
           <select
             defaultValue={"DEFAULT"}
+            value={inputValue3}
             className={wrong ? styles.select_wrong : styles.select}
             onChange={(e) => setInputValue3(e.target.value)}
           >
