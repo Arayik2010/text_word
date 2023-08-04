@@ -4,7 +4,7 @@ import Image from "next/image";
 import { pictureData } from "@/components/utils";
 import GamerCount from "@/components/gamers/gamerCount";
 
-const Post2 = (e) => {
+const Game = () => {
   const [point, setPoint] = useState(0);
   const [count, setCount] = useState(0);
   const [value, setValue] = useState("");
@@ -55,4 +55,4 @@ const Post2 = (e) => {
     </div>
   );
 };
-export default Post2;
+export default Game;

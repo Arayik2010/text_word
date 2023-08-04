@@ -5,9 +5,11 @@ import GamerButton from "../sortButton/gamerButton";
 const GamerCount = ({ listGame }) => {
 
  const [sort,setSort] = useState(false)
+ const [sortId,setSortId] = useState(false)
 
   const sortValue = () =>{
     setSort((prev) =>!prev);
+    setSortId(true)
   return listGame.sort((p1, p2) => (p1.value < p2.value? 1 : p1.value > p2.value ? -1 : 0));
   
   }
@@ -35,7 +37,7 @@ const GamerCount = ({ listGame }) => {
                   {el.key}
                 </th>
                 <td className={styles.td}>{el.value}</td>
-                <td className={styles.td}>{index}</td>
+                <td className={styles.td}>{sortId? index + 1 : index}</td>
               </tr>
             ) : null
           )}

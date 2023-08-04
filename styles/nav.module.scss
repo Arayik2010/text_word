@@ -1,0 +1,11 @@
+.nav_container {
+@apply max-w-6xl m-auto text-center flex justify-between gap-6 py-2 px-80 bg-black;
+
+   .link_item{
+    @apply text-[#ffff];
+
+    &:hover {
+        color: #CBCCCC ;
+    }
+   }
+}
