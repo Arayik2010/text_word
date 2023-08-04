@@ -3,7 +3,7 @@ import styles from "@/styles/Home.module.css";
 import Select from "react-select";
 import { useCallback } from "react";
 
-const Post1 = () => {
+const TextWord = () => {
   const [inputValue1, setInputValue1] = useState("");
   const [inputValue2, setInputValue2] = useState("");
   const [inputValue3, setInputValue3] = useState("");
@@ -105,4 +105,4 @@ const Post1 = () => {
     </div>
   );
 };
-export default Post1;
+export default TextWord;
