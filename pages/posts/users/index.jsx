@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../../styles/post3.module.scss";
 import Box from "../../../components/Molecules/Box";
-import FileCollectionTitle from "@/components/Molecules/FileCollectionTitle";
-import { requestData } from "@/components/Utils/utils";
+import FileCollectionTitle from "../../../components/Molecules/FileCollectionTitle";
+import { requestData, updateDataFormat } from "../../../components/Utils/utils";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { Layout } from "../../../components/Layouts/layout";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import { apiIstance } from "../../../components/Api/ApiInstance";
+import UserModal from "../../../components/Modal/modal";
 
-const Graph = dynamic(() => import("@/components/Organism/Graph/graph"), {
-  ssr: false,
-});
+const Graph = dynamic(
+  () => import("../../../components/Organism/Graph/graph"),
+  {
+    ssr: false,
+  }
+);
 
 export async function getServerSideProps() {
   const res = requestData();
@@ -20,11 +28,40 @@ export async function getServerSideProps() {
 const UsersProfile = ({ userData }) => {
   const [data, setData] = useState(userData || []);
   const [value, setValue] = useState("");
+  const [activePage, setActivePage] = useState(1);
   const [userCurrency, setUserCurrency] = useState("");
+  const [pageCount, setPageCount] = useState(1);
+  const [chunkData, setChunkData] = useState([]);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [deleteOpenModal, setDeleteOpenModal] = useState(false);
+  let pageSize = 5;
 
-  const sendValueUser = async () => {
+  const chunk = data.reduce(
+    (acc, _, i) =>
+      i % pageSize ? acc : [...acc, data && data.slice(i, i + pageSize)],
+    []
+  );
+
+  useEffect(() => {
+    setPageCount(Math.ceil(data.length / pageSize));
+    const dataChunk = chunk[activePage - 1];
+    setChunkData(dataChunk);
+  }, [activePage, data]);
+
+  const openModal = () => {
+    setIsOpen(true);
+  };
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  const closeDeleteModal = () =>{
+    setDeleteOpenModal(false)
+  }
+
+  const addUserData = async () => {
     try {
-      await fetch("http://localhost:3001/user", {
+      await fetch(apiIstance.baseUrl + "/user", {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -36,6 +73,7 @@ const UsersProfile = ({ userData }) => {
           createData: new Date(),
         }),
       });
+      openModal();
       setData(await requestData());
       setValue("");
       setUserCurrency("");
@@ -52,9 +90,20 @@ const UsersProfile = ({ userData }) => {
   };
 
   const deleteRecord = async (id) => {
-    await fetch(`http://localhost:3001/user/${id}`, {
-      method: "DELETE",
-    })
+    try {
+      await fetch(apiIstance.baseUrl + `/user/${id}`, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((res) => setData(res));
+        setDeleteOpenModal(true)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const searchDataUser = async (userName) => {
+    await fetch(apiIstance.baseUrl + `/user?name=${userName}`)
       .then((res) => res.json())
       .then((res) => setData(res));
   };
@@ -75,7 +124,7 @@ const UsersProfile = ({ userData }) => {
           onChange={(e) => setUserCurrency(e.target.value)}
         />
 
-        <button className={styles.add_button} onClick={sendValueUser}>
+        <button className={styles.add_button} onClick={addUserData}>
           add user
         </button>
       </div>
@@ -93,6 +142,12 @@ const UsersProfile = ({ userData }) => {
         />
 
         <Box>
+          <input
+            className={styles.search_input}
+            placeholder="search..."
+            type="text"
+            onChange={(e) => searchDataUser(e.target.value)}
+          />
           <table className={styles.table}>
             <tbody>
               <tr className={styles.tr}>
@@ -103,34 +158,67 @@ const UsersProfile = ({ userData }) => {
                   Currency
                 </th>
                 <th className={styles.th} scope="col">
-                  User Id
+                  Update at
                 </th>
                 <th className={styles.th} scope="col">
                   Action
                 </th>
               </tr>
-              {data.map((el) => (
-                <tr className={styles.tr} key={el.id}>
-                  <th className={styles.th} scope="row">
-                    <Link href={`/posts/users/${el.id}`}>{el.name}</Link>
-                  </th>
-                  <td className={styles.td}>{el.currency}</td>
-                  <td className={styles.td}>{el.id}</td>
-                  <td className={styles.td}>
-                    <button
-                      onClick={() => deleteRecord(el.id)}
-                      className={styles.button}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {chunkData &&
+                chunkData.map((el) => (
+                  <tr className={styles.tr} key={el.id}>
+                    <th className={styles.th} scope="row">
+                      <Link href={`/posts/users/${el.id}`}>{el.name}</Link>
+                    </th>
+                    <td className={styles.td}>{el.currency}</td>
+                    <td className={styles.td}>
+                      {updateDataFormat(el.createData)}
+                    </td>
+                    <td className={styles.td}>
+                      <button
+                        onClick={() => deleteRecord(el.id)}
+                        className={styles.button}
+                      >
+                        Delete
+                      </button>
+                      <Link
+                        className="ml-2"
+                        href={`/posts/users/edit/${el.id}`}
+                      >
+                        <button className={styles.button}>Details</button>
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
+          <Stack spacing={2}>
+            <Pagination
+              onClick={(e) => {
+                setActivePage(+e.target.innerText);
+              }}
+              count={pageCount}
+              shape="rounded"
+            />
+          </Stack>
         </Box>
       </div>
+      <UserModal
+        success
+        modalIsOpen={modalIsOpen}
+        contentTitle={`User ${value} will add in list`}
+        closeModal={closeModal}
+      />
+      <UserModal
+        modalIsOpen={deleteOpenModal}
+        contentTitle={`User deleted from list`}
+        closeModal={closeDeleteModal}
+      />
     </div>
   );
+};
+
+UsersProfile.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
 };
 export default UsersProfile;
