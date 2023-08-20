@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import styles from "@/styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 import Select from "react-select";
 import { useCallback } from "react";
+import { Layout } from "../../components/Layouts/layout";
 
 const TextWord = () => {
   const [inputValue1, setInputValue1] = useState("");
@@ -104,5 +105,9 @@ const TextWord = () => {
       <button onClick={repeat}>Please Repeat</button>
     </div>
   );
+};
+
+TextWord.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
 };
 export default TextWord;

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import styles from "@/styles/post2.module.css";
+import styles from "../../styles/post2.module.css";
 import Image from "next/image";
-import { pictureData } from "@/components/utils";
-import GamerCount from "@/components/gamers/gamerCount";
+import { pictureData } from "../../components/utils";
+import GamerCount from "../../components/gamers/gamerCount";
+import { Layout } from "../../components/Layouts/layout";
 
 const Game = () => {
   const [point, setPoint] = useState(0);
@@ -47,12 +48,22 @@ const Game = () => {
         <p>Your Points {point}</p>
       </div>
       <div className={styles.input_block}>
-        <input className={styles.input} type="text" placeholder="add name" value={value} onChange={(e) => setValue(e.target.value)} />
+        <input
+          className={styles.input}
+          type="text"
+          placeholder="add name"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
       </div>
       <div className={styles.name_table}>
         <GamerCount listGame={listGame} />
       </div>
     </div>
   );
+};
+
+Game.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
 };
 export default Game;

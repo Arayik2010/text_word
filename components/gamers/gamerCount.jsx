@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "@/styles/table.module.css";
+import styles from "../../styles/table.module.css";
 import GamerButton from "../sortButton/gamerButton";
 
 const GamerCount = ({ listGame }) => {
