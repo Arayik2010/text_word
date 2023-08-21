@@ -61,7 +61,7 @@ const UsersProfile = ({ userData }) => {
 
   const addUserData = async () => {
     try {
-      await fetch(apiIstance.baseUrl + "/user", {
+      await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/user", {
         method: "post",
         headers: {
           "content-type": "application/json",
@@ -91,7 +91,7 @@ const UsersProfile = ({ userData }) => {
 
   const deleteRecord = async (id) => {
     try {
-      await fetch(apiIstance.baseUrl + `/user/${id}`, {
+      await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/user/${id}`, {
         method: "DELETE",
       })
         .then((res) => res.json())
@@ -103,7 +103,7 @@ const UsersProfile = ({ userData }) => {
   };
 
   const searchDataUser = async (userName) => {
-    await fetch(apiIstance.baseUrl + `/user?name=${userName}`)
+    await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/user?name=${userName}`)
       .then((res) => res.json())
       .then((res) => setData(res));
   };
