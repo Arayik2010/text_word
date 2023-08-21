@@ -8,7 +8,7 @@ import UserModal from '../../../../components/Modal/modal';
 import Box from '../../../../components/Molecules/Box';
 
 export const getStaticPaths = async () => {
-  const res = await fetch("http://localhost:3001/user");
+  const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL + "/user");
   const dataItems = await res.json();
   console.log(dataItems, "hhh");
 
@@ -25,7 +25,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (context) => {
   const id = context.params.id;
-  const requestItem = await fetch(`http://localhost:3001/user/${id}`);
+  const requestItem = await fetch(process.env.NEXT_PUBLIC_BASE_URL + `/user/${id}`);
   const responseItem = await requestItem.json();
 
   return { props: { userData: responseItem } };
