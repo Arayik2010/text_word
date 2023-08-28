@@ -23,8 +23,6 @@ const UserModal = ({ modalIsOpen, contentTitle,closeModal,success }) => {
       <Modal
         isOpen={modalIsOpen}
         ariaHideApp={false}
-        // onAfterOpen={afterOpenModal}
-        // onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Example Modal"
       >
