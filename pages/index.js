@@ -1,10 +1,12 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Inter } from "next/font/google";
-import styles from "../styles/Home.module.css"
+import styles from "../styles/Home.module.css";
 import Post1 from "./posts/textWord";
 import Login from "../components/Organism/Login";
 import AutoLayout from "../components/Layouts/autoLayout";
+import TextWord from "./posts/textWord";
+import { Layout } from "../components/Layouts/layout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,9 +20,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <AutoLayout>
-          <Login />
-        </AutoLayout>
+        <Layout>
+          <TextWord />
+        </Layout>
       </main>
     </>
   );
