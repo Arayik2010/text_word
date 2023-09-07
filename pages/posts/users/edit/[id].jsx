@@ -88,6 +88,7 @@ export default function UpdateUser({userData}) {
        
       </div>
       <UserModal
+       onlyConfirmButton={true}
         modalIsOpen={userUpdateModal}
         contentTitle={`User ${value} update your data`}
         closeModal={closeUpdateModal}

@@ -48,16 +48,14 @@ const UsersProfile = ({ userData }) => {
     setChunkData(dataChunk);
   }, [activePage, data]);
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
+
   const closeModal = () => {
     setIsOpen(false);
   };
 
-  const closeDeleteModal = () =>{
-    setDeleteOpenModal(false)
-  }
+  const closeDeleteModal = () => {
+    setDeleteOpenModal(false);
+  };
 
   const addUserData = async () => {
     try {
@@ -74,12 +72,13 @@ const UsersProfile = ({ userData }) => {
         }),
       });
       openModal();
-      setData(await requestData());
       setValue("");
       setUserCurrency("");
     } catch (error) {
       console.log(error);
     }
+
+  
 
     // const requestOptions = {
     //   method: "POST",
@@ -88,6 +87,11 @@ const UsersProfile = ({ userData }) => {
     // };
     // fetch("http://localhost:3001/user", requestOptions);
   };
+  const handleRequestCloseModal = async() =>{
+    addUserData()
+    setIsOpen(false)
+    setData(await requestData());
+  }
 
   const deleteRecord = async (id) => {
     try {
@@ -96,7 +100,7 @@ const UsersProfile = ({ userData }) => {
       })
         .then((res) => res.json())
         .then((res) => setData(res));
-        setDeleteOpenModal(true)
+      setDeleteOpenModal(false);
     } catch (error) {
       console.log(error);
     }
@@ -124,7 +128,7 @@ const UsersProfile = ({ userData }) => {
           onChange={(e) => setUserCurrency(e.target.value)}
         />
 
-        <button className={styles.add_button} onClick={addUserData}>
+        <button className={styles.add_button} onClick={()=> setIsOpen(true)}>
           add user
         </button>
       </div>
@@ -176,7 +180,7 @@ const UsersProfile = ({ userData }) => {
                     </td>
                     <td className={styles.td}>
                       <button
-                        onClick={() => deleteRecord(el.id)}
+                        onClick={() => setDeleteOpenModal(el)}
                         className={styles.button}
                       >
                         Delete
@@ -205,14 +209,23 @@ const UsersProfile = ({ userData }) => {
       </div>
       <UserModal
         success
+        onlyConfirmButton={true}
+        handlerRequest={() =>handleRequestCloseModal()}
         modalIsOpen={modalIsOpen}
         contentTitle={`User ${value} will add in list`}
         closeModal={closeModal}
       />
       <UserModal
+        showHandleButtons={true}
+        id={'0'}
+        handlerRequest={() => deleteRecord(deleteOpenModal.id)}
         modalIsOpen={deleteOpenModal}
         contentTitle={`User deleted from list`}
-        closeModal={closeDeleteModal}
+        closeRequestModal={closeDeleteModal}
+        handleDeleteButton={"Delete"}
+        handleDeclineButton={"Cansel"}
+        deleteButtonClass="px-10 py-2 bg-red-500 text-white"
+        declineButtonClass="px-10 py-2 border-black  text-black"
       />
     </div>
   );

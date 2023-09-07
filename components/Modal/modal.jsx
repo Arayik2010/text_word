@@ -16,7 +16,21 @@ const customStyles = {
   },
 };
 
-const UserModal = ({ modalIsOpen, contentTitle,closeModal,success }) => {
+const UserModal = ({
+  modalIsOpen,
+  contentTitle,
+  closeModal,
+  handlerRequest,
+  showHandleButtons,
+  handleDeleteButton,
+  handleDeclineButton,
+  onlyConfirmButton,
+  deleteButtonClass,
+  declineButtonClass,
+  closeRequestModal,
+  id
+
+}) => {
   return (
     <div>
       {" "}
@@ -38,9 +52,19 @@ const UserModal = ({ modalIsOpen, contentTitle,closeModal,success }) => {
           <p className="mt-4 text-[#535454] font-medium">{contentTitle}</p>
         </div>
         <div className="text-center">
-          <button className="bg-[#0A214A] rounded-md text-white px-32 mt-4 m-auto py-1" onClick={closeModal}>
-            Continue
-          </button>
+          <div className="flex mt-6 px-6 ">
+            {showHandleButtons ? <button onClick={closeRequestModal} className={`border m-auto rounded-md ${declineButtonClass}`}>{handleDeclineButton}</button> : null}
+            {showHandleButtons ? <button onClick={(id)=> handlerRequest(id)} className={`border m-auto rounded-md ${deleteButtonClass}`}>{handleDeleteButton}</button> : null}
+          </div>
+
+          {onlyConfirmButton ? (
+            <button
+              className="bg-[#0A214A] rounded-md text-white px-32 mt-4 m-auto py-1"
+              onClick={(id) =>handlerRequest(id)}
+            >
+              Continue
+            </button>
+          ) : null}
         </div>
       </Modal>
     </div>
