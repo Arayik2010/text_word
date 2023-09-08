@@ -71,15 +71,13 @@ const UsersProfile = ({ userData }) => {
           createData: new Date(),
         }),
       });
-      openModal();
+      setIsOpen(true)
+      setData(await requestData())
       setValue("");
       setUserCurrency("");
     } catch (error) {
       console.log(error);
     }
-
-  
-
     // const requestOptions = {
     //   method: "POST",
     //   headers: { "Content-Type": "application/json" },
@@ -128,7 +126,7 @@ const UsersProfile = ({ userData }) => {
           onChange={(e) => setUserCurrency(e.target.value)}
         />
 
-        <button className={styles.add_button} onClick={()=> setIsOpen(true)}>
+        <button className={styles.add_button} onClick={addUserData}>
           add user
         </button>
       </div>
@@ -210,7 +208,7 @@ const UsersProfile = ({ userData }) => {
       <UserModal
         success
         onlyConfirmButton={true}
-        handlerRequest={() =>handleRequestCloseModal()}
+        // handlerRequest={() =>handleRequestCloseModal()}
         modalIsOpen={modalIsOpen}
         contentTitle={`User ${value} will add in list`}
         closeModal={closeModal}
@@ -219,7 +217,7 @@ const UsersProfile = ({ userData }) => {
         showHandleButtons={true}
         id={'0'}
         handlerRequest={() => deleteRecord(deleteOpenModal.id)}
-        modalIsOpen={deleteOpenModal}
+        modalIsOpen={!!deleteOpenModal}
         contentTitle={`User deleted from list`}
         closeRequestModal={closeDeleteModal}
         handleDeleteButton={"Delete"}

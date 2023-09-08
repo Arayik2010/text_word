@@ -60,7 +60,7 @@ const UserModal = ({
           {onlyConfirmButton ? (
             <button
               className="bg-[#0A214A] rounded-md text-white px-32 mt-4 m-auto py-1"
-              onClick={(id) =>handlerRequest(id)}
+              onClick={closeModal}
             >
               Continue
             </button>
