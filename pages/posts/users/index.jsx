@@ -10,6 +10,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import { apiIstance } from "../../../components/Api/ApiInstance";
 import UserModal from "../../../components/Modal/modal";
+import PagePopover from "../../../components/Organism/popover";
 
 const Graph = dynamic(
   () => import("../../../components/Organism/Graph/graph"),
@@ -48,7 +49,6 @@ const UsersProfile = ({ userData }) => {
     setChunkData(dataChunk);
   }, [activePage, data]);
 
-
   const closeModal = () => {
     setIsOpen(false);
   };
@@ -71,8 +71,8 @@ const UsersProfile = ({ userData }) => {
           createData: new Date(),
         }),
       });
-      setIsOpen(true)
-      setData(await requestData())
+      setIsOpen(false);
+      setData(await requestData());
       setValue("");
       setUserCurrency("");
     } catch (error) {
@@ -85,11 +85,11 @@ const UsersProfile = ({ userData }) => {
     // };
     // fetch("http://localhost:3001/user", requestOptions);
   };
-  const handleRequestCloseModal = async() =>{
-    addUserData()
-    setIsOpen(false)
+  const handleRequestCloseModal = async () => {
+    addUserData();
+    setIsOpen(false);
     setData(await requestData());
-  }
+  };
 
   const deleteRecord = async (id) => {
     try {
@@ -126,7 +126,7 @@ const UsersProfile = ({ userData }) => {
           onChange={(e) => setUserCurrency(e.target.value)}
         />
 
-        <button className={styles.add_button} onClick={addUserData}>
+        <button className={styles.add_button} onClick={() => setIsOpen(true)}>
           add user
         </button>
       </div>
@@ -177,18 +177,20 @@ const UsersProfile = ({ userData }) => {
                       {updateDataFormat(el.createData)}
                     </td>
                     <td className={styles.td}>
-                      <button
-                        onClick={() => setDeleteOpenModal(el)}
-                        className={styles.button}
-                      >
-                        Delete
-                      </button>
-                      <Link
-                        className="ml-2"
-                        href={`/posts/users/edit/${el.id}`}
-                      >
-                        <button className={styles.button}>Details</button>
-                      </Link>
+                      <PagePopover containerClassName='mt-16'>
+                        <button
+                          onClick={() => setDeleteOpenModal(el)}
+                          className={styles.button}
+                        >
+                          Delete
+                        </button>
+                        <Link
+                          className="ml-2"
+                          href={`/posts/users/edit/${el.id}`}
+                        >
+                          <button className={styles.button}>Details</button>
+                        </Link>
+                      </PagePopover>
                     </td>
                   </tr>
                 ))}
@@ -208,14 +210,14 @@ const UsersProfile = ({ userData }) => {
       <UserModal
         success
         onlyConfirmButton={true}
-        // handlerRequest={() =>handleRequestCloseModal()}
+        handlerRequest={() => handleRequestCloseModal()}
         modalIsOpen={modalIsOpen}
         contentTitle={`User ${value} will add in list`}
         closeModal={closeModal}
       />
       <UserModal
         showHandleButtons={true}
-        id={'0'}
+        id={"0"}
         handlerRequest={() => deleteRecord(deleteOpenModal.id)}
         modalIsOpen={!!deleteOpenModal}
         contentTitle={`User deleted from list`}
